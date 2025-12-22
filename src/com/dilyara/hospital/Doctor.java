@@ -16,7 +16,7 @@ public class Doctor {
         this.doctorId = doctorId;
         this.name = name;
         this.specialization = specialization;
-        this.rating = rating;
+        setRating(rating);
     }
 
     // =========================
@@ -47,6 +47,15 @@ public class Doctor {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
+    }
+
+    public void setRating(double rating) {
+        if (rating >= 0 && rating <= 5) {
+            this.rating = rating;
+        } else {
+            System.out.println("Warning! Rating must be between 0 and 5. Setting rating to 0.");
+            this.rating = 0;
+        }
     }
 
     // =========================

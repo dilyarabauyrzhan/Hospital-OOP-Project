@@ -14,8 +14,8 @@ public class Patient {
     // =========================
     public Patient(int patientId, String fullName, int age, boolean insuranceActive) {
         this.patientId = patientId;
-        this.fullName = fullName;
-        this.age = age;
+        setFullName(fullName);
+        setAge(age);
         this.insuranceActive = insuranceActive;
     }
 
@@ -42,11 +42,20 @@ public class Patient {
     // 4. Setters
     // =========================
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        if (fullName != null && !fullName.trim().isEmpty()) {
+            this.fullName = fullName;
+        } else {
+            System.out.println("Warning! Name cannot be empty.");
+        }
     }
 
     public void setAge(int age) {
-        this.age = age;
+        if (age >= 0) {
+            this.age = age;
+        } else {
+            System.out.println("Warning! Age cannot be negative. Setting age to 0.");
+            this.age = 0;
+        }
     }
 
     public void setInsuranceActive(boolean insuranceActive) {
