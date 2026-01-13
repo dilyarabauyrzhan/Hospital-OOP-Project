@@ -5,127 +5,165 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static ArrayList<Patient> patients = new ArrayList<>();
-    private static ArrayList<Doctor> doctors = new ArrayList<>();
-
-    private static Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) {
 
-    System.out.println("Welcome to the Hospital Management System!");
-    System.out.println("This project is developed as part of an OOP course.");
-    System.out.println("The system will manage patients, doctors, and departments.");
-    System.out.println("Project domain: Hospital");
-    System.out.println("Author: Dilyara Bauyrzhan");
+        System.out.println("Welcome to the Hospital Management System!");
+        System.out.println("This project is developed as part of an OOP course.");
+        System.out.println("The system will manage patients, doctors, and departments.");
+        System.out.println("Project domain: Hospital");
+        System.out.println("Author: Dilyara Bauyrzhan");
 
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Person> people = new ArrayList<>();
 
-    patients.add(new Patient(1, "Anna Kim", 17, false));
-    patients.add(new Patient(2, "John S.", 22, true));
+        int choice;
 
-    doctors.add(new Doctor(101, "Dr. Lee", "Cardiology", 4.3));
-    doctors.add(new Doctor(102, "Dr. Ivanov", "Surgery", 4.8));
+        do {
+            System.out.println("========================================");
+            System.out.println(" HOSPITAL MANAGEMENT SYSTEM");
+            System.out.println("========================================");
+            System.out.println("1. Add Person (General)");
+            System.out.println("2. Add Patient");
+            System.out.println("3. Add Doctor");
+            System.out.println("4. View All People (Polymorphic)");
+            System.out.println("5. Demonstrate Polymorphism");
+            System.out.println("6. View Patients Only");
+            System.out.println("7. View Doctors Only");
+            System.out.println("0. Exit");
+            System.out.println("========================================");
+            System.out.print("Enter your choice: ");
 
-    boolean running = true;
+            choice = scanner.nextInt();
+            scanner.nextLine();
 
-    while (running) {
+            switch (choice) {
 
-        System.out.println("\n=== HOSPITAL MENU ===");
-        System.out.println("1. Add Patient");
-        System.out.println("2. View All Patients");
-        System.out.println("3. Add Doctor");
-        System.out.println("4. View All Doctors");
-        System.out.println("0. Exit");
-        System.out.print("Enter choice: ");
+                // -------------------------
+                // 1. Add Person
+                // -------------------------
+                case 1 -> {
+                    System.out.print("Enter ID: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
 
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+                    System.out.print("Enter name: ");
+                    String name = scanner.nextLine();
 
-        switch (choice) {
-                case 1:
-                    addPatient();
-                    break;
+                    System.out.print("Enter age: ");
+                    int age = scanner.nextInt();
 
-                case 2:
-                    viewAllPatients();
-                    break;
+                    Person person = new Person(id, name, age, "Person");
+                    people.add(person);
 
-                case 3:
-                    addDoctor();
-                    break;
+                    System.out.println("Person added successfully.\n");
+                }
 
-                case 4:
-                    viewAllDoctors();
-                    break;
+                // -------------------------
+                // 2. Add Patient
+                // -------------------------
+                case 2 -> {
+                    System.out.print("Enter ID: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
 
-                case 0:
-                    running = false;
-                    System.out.println("Exiting program...");
-                    break;
+                    System.out.print("Enter name: ");
+                    String name = scanner.nextLine();
 
-                default:
-                    System.out.println("Invalid option. Try again.");
+                    System.out.print("Enter age: ");
+                    int age = scanner.nextInt();
+
+                    System.out.print("Has insurance? (true/false): ");
+                    boolean insurance = scanner.nextBoolean();
+
+                    Patient patient = new Patient(id, name, age, insurance);
+                    people.add(patient);
+
+                    System.out.println("Patient added successfully.\n");
+                }
+
+                // -------------------------
+                // 3. Add Doctor
+                // -------------------------
+                case 3 -> {
+                    System.out.print("Enter ID: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.print("Enter name: ");
+                    String name = scanner.nextLine();
+
+                    System.out.print("Enter age: ");
+                    int age = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.print("Enter specialization: ");
+                    String specialization = scanner.nextLine();
+
+                    System.out.print("Enter rating: ");
+                    double rating = scanner.nextDouble();
+
+                    Doctor doctor = new Doctor(id, name, age, specialization, rating);
+                    people.add(doctor);
+
+                    System.out.println("Doctor added successfully.\n");
+                }
+
+                // -------------------------
+                // 4. View All (Polymorphic)
+                // -------------------------
+                case 4 -> {
+                    System.out.println("\n--- All People (Polymorphic) ---");
+                    for (Person p : people) {
+                        System.out.println(p.getDescription());
+                    }
+                    System.out.println();
+                }
+
+                // -------------------------
+                // 5. Demonstrate Polymorphism
+                // -------------------------
+                case 5 -> {
+                    System.out.println("\n--- Polymorphism Demo ---");
+                    for (Person p : people) {
+                        System.out.println(p.getDescription());
+                    }
+                    System.out.println();
+                }
+
+                // -------------------------
+                // 6. View Patients Only
+                // -------------------------
+                case 6 -> {
+                    System.out.println("\n--- Patients Only ---");
+                    for (Person p : people) {
+                        if (p instanceof Patient) {
+                            System.out.println(p.getDescription());
+                        }
+                    }
+                    System.out.println();
+                }
+
+                // -------------------------
+                // 7. View Doctors Only
+                // -------------------------
+                case 7 -> {
+                    System.out.println("\n--- Doctors Only ---");
+                    for (Person p : people) {
+                        if (p instanceof Doctor) {
+                            System.out.println(p.getDescription());
+                        }
+                    }
+                    System.out.println();
+                }
+
+                case 0 -> System.out.println("Exiting program. Goodbye! :)");
+
+                default -> System.out.println("Invalid choice :( Try again.\n");
             }
-        }
+
+        } while (choice != 0);
+
+        scanner.close();
 
     }
-
-    private static void addPatient() {
-        System.out.print("Enter full name: ");
-        String name = scanner.nextLine();
-
-        System.out.print("Enter age: ");
-        int age = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Has insurance (true/false): ");
-        boolean insurance = scanner.nextBoolean();
-        scanner.nextLine();
-
-        Patient patient = new Patient(patients.size() + 1, name, age, insurance);
-        patients.add(patient);
-
-        System.out.println("Patient added successfully.");
-    }
-
-    private static void viewAllPatients() {
-        if (patients.isEmpty()) {
-            System.out.println("No patients found.");
-            return;
-        }
-
-        System.out.println("\n--- PATIENT LIST ---");
-        for (Patient p : patients) {
-            System.out.println(p);
-        }
-    }
-
-    private static void addDoctor() {
-        System.out.print("Enter doctor name: ");
-        String name = scanner.nextLine();
-
-        System.out.print("Enter specialization: ");
-        String specialization = scanner.nextLine();
-
-        System.out.print("Enter rating (0–5): ");
-        double rating = scanner.nextDouble();
-        scanner.nextLine();
-
-        Doctor doctor = new Doctor(doctors.size() + 1, name, specialization, rating);
-        doctors.add(doctor);
-
-        System.out.println("Doctor added successfully.");
-    }
-
-    private static void viewAllDoctors() {
-        if (doctors.isEmpty()) {
-            System.out.println("No doctors found.");
-            return;
-        }
-
-        System.out.println("\n--- DOCTOR LIST ---");
-        for (Doctor d : doctors) {
-            System.out.println(d);
-        }
-    }
-
 }

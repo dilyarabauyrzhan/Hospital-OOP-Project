@@ -1,35 +1,25 @@
 package com.dilyara.hospital;
 
-public class Doctor {
+public class Doctor extends Person {
     // =========================
     // 1. Doctor data
     // =========================
-    private int doctorId;
-    private String name;
     private String specialization;
     private double rating;
 
     // =========================
     // 2. Constructor
     // =========================
-    public Doctor(int doctorId, String name, String specialization, double rating) {
-        this.doctorId = doctorId;
-        this.name = name;
+    public Doctor(int id, String name, int age, String specialization, double rating) {
+        super(id, name, age, "Doctor");
         this.specialization = specialization;
-        setRating(rating);
+        this.rating = rating;
     }
+
 
     // =========================
     // 3. Getters
     // =========================
-    public int getDoctorId() {
-        return doctorId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public String getSpecialization() {
         return specialization;
     }
@@ -41,9 +31,6 @@ public class Doctor {
     // =========================
     // 4. Setters
     // =========================
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
@@ -75,17 +62,18 @@ public class Doctor {
     }
 
     // =========================
-    // 6. toString()
+    // 6.  Overridden methods
     // =========================
     @Override
-    public String toString() {
-        return "Doctor{" +
-                "id=" + doctorId +
-                ", name='" + name + '\'' +
-                ", specialization='" + specialization + '\'' +
-                ", rating=" + rating +
-                '}';
+    public String getRole() {
+        return "Doctor";
     }
 
+    @Override
+    public String getDescription() {
+        return "Doctor: " + name + ", age " + age +
+                ", specialization: " + specialization +
+                ", rating: " + rating;
+    }
 
 }
