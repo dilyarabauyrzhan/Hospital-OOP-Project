@@ -11,7 +11,7 @@ public class Doctor extends Person {
     // 2. Constructor
     // =========================
     public Doctor(int id, String name, int age, String specialization, double rating) {
-        super(id, name, age, "Doctor");
+        super(id, name, age);
         this.specialization = specialization;
         this.rating = rating;
     }
@@ -37,12 +37,10 @@ public class Doctor extends Person {
     }
 
     public void setRating(double rating) {
-        if (rating >= 0 && rating <= 5) {
-            this.rating = rating;
-        } else {
-            System.out.println("Warning! Rating must be between 0 and 5. Setting rating to 0.");
-            this.rating = 0;
+        if (rating < 0 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 0 and 5");
         }
+        this.rating = rating;
     }
 
     // =========================

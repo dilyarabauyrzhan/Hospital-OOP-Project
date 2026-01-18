@@ -1,6 +1,6 @@
 package com.dilyara.hospital;
 
-public class Patient extends Person {
+public class Patient extends Person implements Treatable {
     // =========================
     // 1. Patient data
     // =========================
@@ -10,7 +10,7 @@ public class Patient extends Person {
     // 2. Constructor
     // =========================
     public Patient(int id, String name, int age, boolean insuranceActive) {
-        super(id, name, age, "Patient");
+        super(id, name, age);
         this.insuranceActive = insuranceActive;
     }
 
@@ -54,7 +54,10 @@ public class Patient extends Person {
                 ", insurance active: " + insuranceActive;
     }
 
-
+    @Override
+    public void receiveTreatment() {
+        System.out.println(name + " is receiving treatment.");
+    }
 }
 
 
