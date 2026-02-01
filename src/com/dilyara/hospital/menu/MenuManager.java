@@ -1,36 +1,41 @@
 package com.dilyara.hospital.menu;
 
-import com.dilyara.hospital.*;
-import java.util.ArrayList;
+import com.dilyara.hospital.Patient;
+import database.PatientDAO;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuManager implements Menu {
-    private Scanner scanner;
-    private ArrayList<Person> people;
+
+    private final Scanner scanner;
+    private final PatientDAO patientDAO;
 
     public MenuManager() {
-        scanner = new Scanner(System.in);
-        people  = new ArrayList<>();
+        this.scanner = new Scanner(System.in);
+        this.patientDAO = new PatientDAO();
     }
 
     @Override
     public void displayMenu() {
-        System.out.println("========================================");
-        System.out.println(" HOSPITAL MANAGEMENT SYSTEM");
+        System.out.println("\n========================================");
+        System.out.println(" HOSPITAL MANAGEMENT SYSTEM ");
         System.out.println("========================================");
         System.out.println("1. Add Patient");
-        System.out.println("2. Add Doctor");
-        System.out.println("3. View All People");
-        System.out.println("4. View Patients Only");
-        System.out.println("5. View Doctors Only");
+        System.out.println("2. View All Patients");
+        System.out.println("3. Update Patient");
+        System.out.println("4. Delete Patient");
+        System.out.println("5. Search Patient by Name");
+        System.out.println("6. Search Patient by Age Range");
+        System.out.println("7. Search Patient by Min Age");
         System.out.println("0. Exit");
-        System.out.println("========================================");
         System.out.print("Enter your choice: ");
     }
 
     @Override
     public void run() {
         int choice;
+
         do {
             displayMenu();
             choice = scanner.nextInt();
@@ -38,22 +43,22 @@ public class MenuManager implements Menu {
 
             switch (choice) {
                 case 1 -> addPatient();
-                case 2 -> addDoctor();
-                case 3 -> viewAll();
-                case 4 -> viewPatients();
-                case 5 -> viewDoctors();
-                case 0 -> System.out.println("Exiting program. Goodbye! :)");
-                default -> System.out.println("Invalid choice :( Try again.\n");
+                case 2 -> viewAllPatients();
+                case 3 -> updatePatient();
+                case 4 -> deletePatient();
+                case 5 -> searchByName();
+                case 6 -> searchByAgeRange();
+                case 7 -> searchByMinAge();
+                case 0 -> System.out.println("Goodbye!");
+                default -> System.out.println("Invalid choice.");
             }
         } while (choice != 0);
-
-        scanner.close();
     }
 
+    // ===== MENU ACTIONS =====
 
-    //Add Functions//
     private void addPatient() {
-        try {System.out.print("Enter ID: ");
+        System.out.print("Enter ID: ");
         int id = scanner.nextInt();
         scanner.nextLine();
 
@@ -62,72 +67,77 @@ public class MenuManager implements Menu {
 
         System.out.print("Enter age: ");
         int age = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Has insurance? (true/false): ");
         boolean insurance = scanner.nextBoolean();
 
         Patient patient = new Patient(id, name, age, insurance);
-        people.add(patient);
-
-        System.out.println("Patient added successfully.\n");} catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-            scanner.nextLine();
-        }
+        patientDAO.insertPatient(patient);
     }
 
-    private void addDoctor() {
-        try { System.out.print("Enter ID: ");
+    private void viewAllPatients() {
+        patientDAO.getAllPatients(); 
+    }
+
+    private void updatePatient() {
+        System.out.print("Enter patient ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Enter name: ");
+        System.out.print("New name: ");
         String name = scanner.nextLine();
 
-        System.out.print("Enter age: ");
+        System.out.print("New age: ");
         int age = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Enter specialization: ");
-        String specialization = scanner.nextLine();
+        System.out.print("New diagnosis: ");
+        String diagnosis = scanner.nextLine();
 
-        System.out.print("Enter rating: ");
-        double rating = scanner.nextDouble();
+        patientDAO.updatePatient(id, name, age, diagnosis);
+    }
 
-        Doctor doctor = new Doctor(id, name, age, specialization, rating);
-        people.add(doctor);
+    private void deletePatient() {
+        System.out.print("Enter patient ID to delete: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
 
-        System.out.println("Doctor added successfully.\n"); } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-            scanner.nextLine();
+        System.out.print("Are you sure? (yes/no): ");
+        String confirm = scanner.nextLine();
+
+        if (confirm.equalsIgnoreCase("yes")) {
+            patientDAO.deletePatient(id);
+        } else {
+            System.out.println("Deletion cancelled.");
         }
     }
 
-    //View functions//
-    private void viewAll() {
-        System.out.println("\n--- All People ---");
-        for (Person p : people) {
-            System.out.println(p.getDescription());
-        }
-        System.out.println();
+    private void searchByName() {
+        System.out.print("Enter name to search: ");
+        String name = scanner.nextLine();
+
+        List<String> results = patientDAO.searchPatientByName(name);
+        results.forEach(System.out::println);
     }
 
-    private void viewPatients() {
-        System.out.println("\n--- Patients Only ---");
-        for (Person p : people) {
-            if (p instanceof Patient) {
-                System.out.println(p.getDescription());
-            }
-        }
-        System.out.println();
+    private void searchByAgeRange() {
+        System.out.print("Enter min age: ");
+        int min = scanner.nextInt();
+        System.out.print("Enter max age: ");
+        int max = scanner.nextInt();
+        scanner.nextLine();
+
+        List<String> results = patientDAO.searchByAgeRange(min, max);
+        results.forEach(System.out::println);
     }
 
-    private void viewDoctors() {
-        System.out.println("\n--- Doctors Only ---");
-        for (Person p : people) {
-            if (p instanceof Doctor) {
-                System.out.println(p.getDescription());
-            }
-        }
-        System.out.println();
+    private void searchByMinAge() {
+        System.out.print("Enter minimum age: ");
+        int min = scanner.nextInt();
+        scanner.nextLine();
+
+        List<String> results = patientDAO.searchByMinAge(min);
+        results.forEach(System.out::println);
     }
 }

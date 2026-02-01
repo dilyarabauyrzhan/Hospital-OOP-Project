@@ -17,6 +17,15 @@ public abstract class Person {
         setAge(age);
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
     // =========================
     // Abstract method
     // =========================
